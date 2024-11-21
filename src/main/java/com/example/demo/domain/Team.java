@@ -1,22 +1,39 @@
 package com.example.demo.domain;
 
-//
-//CREATE TABLE team (
-//        id SERIAL PRIMARY KEY,
-//        team_name VARCHAR NOT NULL UNIQUE,
-//        team_type VARCHAR CHECK (team_type IN ('Club', 'Country', 'Region')) NOT NULL,
-//country_code VARCHAR REFERENCES ml_country(iso) ON DELETE SET NULL,
-//created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-//updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-//);
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Builder
 @Setter
 public class Team {
+    public static final String ERR_INVALID_TEAM_TYPE = "ERR Invalid team type";
+    public static TeamType ToTeamType(String teamType) {
+        return TeamType.valueOf(teamType.toUpperCase());
+    }
+
+    public static String ToValidTeamType(String teamType) {
+        Map<String, Boolean> validTeamType = Map.of(
+                "Club", true,
+                "Country", true,
+                "Region", true
+        );
+        teamType = teamType.toUpperCase();
+        teamType = teamType.charAt(0)+teamType.substring(1, teamType.length() - 1);
+
+        if (validTeamType.containsKey(teamType)) {
+            return teamType;
+        }
+
+        throw new IllegalArgumentException(ERR_INVALID_TEAM_TYPE);
+    }
+
+    public static final String ERR_TEAM_EXIST = "Err Team already exist";
+
     public enum TeamType {
         CLUB, COUNTRY, REGION
     }
@@ -24,6 +41,7 @@ public class Team {
     public static TeamType toTeamType(String teamType) {
         return TeamType.valueOf(teamType.toUpperCase());
     }
+
     @JsonProperty("id")
     Long id;
 
