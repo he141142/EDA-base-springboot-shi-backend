@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://database-1.ctm48w482yqa.ap-southeast-1.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: l8019454
+    driver-class-name: org.postgresql.Driver
+
+    jpa:
+      properties:
+        hibernate:
+          default_schema: shi_dev
+      hibernate:
+        ddl-auto: update
+        show-sql: true
+        properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
