@@ -11,6 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Country {
+    public final static String ERR_COUNTRY_NOT_FOUND = "Country not found";
+
     @JsonProperty("id")
     Long id;
 
