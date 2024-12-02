@@ -6,9 +6,11 @@ import com.example.demo.core.ports.repo.ITeamRepo;
 import com.example.demo.domain.Country;
 import com.example.demo.domain.Team;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
+@Qualifier("CreateTeamCommandHandler")
 public class CreateTeamCommandHandler implements CommandHandler<Team, CreateTeamCommand> {
     ICountryRepo countryRepo;
     @Autowired
