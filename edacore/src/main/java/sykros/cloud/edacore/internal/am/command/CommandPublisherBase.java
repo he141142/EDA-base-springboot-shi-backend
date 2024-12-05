@@ -1,9 +1,11 @@
 package sykros.cloud.edacore.internal.am.command;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import sykros.cloud.edacore.internal.am.Message;
 import sykros.cloud.edacore.internal.am.MessagePublisher;
 import sykros.cloud.edacore.internal.ddd.Command;
 
-public class CommandPublisherBase implements CommandPublisher{
+public class CommandPublisherBase implements CommandPublisher {
 
     MessagePublisher messagePublisher;
 
@@ -16,6 +18,11 @@ public class CommandPublisherBase implements CommandPublisher{
         CommandMessageBase commandMessage = new CommandMessageBase(command.CommandName());
         commandMessage.setOccurredOn(command.OccurredOn());
         commandMessage.setPayload(command.Payload());
-        messagePublisher.Publish(topic, commandMessage);
+        Message msg = new Message(command.ID(), command.CommandName());
+        msg.setSubject(topic);
+        ObjectMapper mapper = new ObjectMapper();
+        byte[] payload = mapper.writeValueAsBytes(command.Payload());
+        msg.setData(payload);
+        messagePublisher.Publish(topic, msg);
     }
 }

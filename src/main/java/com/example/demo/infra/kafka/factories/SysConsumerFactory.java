@@ -1,7 +1,5 @@
 package com.example.demo.infra.kafka.factories;
 
-import com.example.demo.core.am.AmInComingMessage;
-import com.example.demo.core.am.SubscriberOption;
 import com.example.demo.infra.kafka.config.ConsumerOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +8,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.stereotype.Component;
+import sykros.cloud.edacore.internal.am.IIncomingMessage;
+import sykros.cloud.edacore.internal.am.SubscriberConfig;
 
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class SysConsumerFactory {
     }
 
 
-    private ConsumerFactory<String, Object> buildConsumerFactory(SubscriberOption subscriberOption) {
+    private ConsumerFactory<String, Object> buildConsumerFactory(SubscriberConfig subscriberOption) {
         Map<String, Object> properties = kfProp.buildCommonProperties();
         ConsumerOption consumerOpt = kfProp.getConsumerConfig().get(subscriberOption.getName());
         assert consumerOpt != null;
@@ -38,9 +38,9 @@ public class SysConsumerFactory {
 
     @Bean
     @Qualifier("CommandKafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, AmInComingMessage> CommandKafkaListenerContainerFactory() {
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, AmInComingMessage>();
-        factory.setConsumerFactory(buildConsumerFactory(SubscriberOption.builder().name("sykros.command").build()));
+    public ConcurrentKafkaListenerContainerFactory<String, IIncomingMessage> CommandKafkaListenerContainerFactory() {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, IIncomingMessage>();
+        factory.setConsumerFactory(buildConsumerFactory(SubscriberConfig.builder().name("sykros.command").build()));
         return factory;
     }
 }

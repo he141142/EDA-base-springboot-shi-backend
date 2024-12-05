@@ -1,22 +1,33 @@
 package com.example.demo.core.services.background;
 
-import com.example.demo.core.am.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import sykros.cloud.edacore.internal.am.MessageHandler;
+import sykros.cloud.edacore.internal.am.MessageSubscriber;
+import sykros.cloud.edacore.internal.am.SubscriberConfig;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class SysInitializer implements Runnable {
     private static final String DEFAULT_TOPIC = "com.sykros.am.command";
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SysInitializer.class);
     MessageSubscriber messageSubscriber;
+    MessageHandler commandHandler;
 
-    MessageHandler messageHandler;
+    MessageHandler replyHandler;
 
     @Autowired
-    public void setMessageHandler(MessageHandler messageHandler) {
-        this.messageHandler = messageHandler;
+    public void setCommandHandler(@Qualifier("CommandMessageHandler") MessageHandler commandHandler) {
+        this.commandHandler = commandHandler;
+    }
+
+    @Autowired
+    public void setReplyHandler(@Qualifier("ReplyMessageHandler") MessageHandler replyHandler) {
+        this.replyHandler = replyHandler;
     }
 
     @Autowired
@@ -28,6 +39,24 @@ public class SysInitializer implements Runnable {
 
     @Override
     public void run() {
-       this.messageSubscriber.Subscribe("drake",messageHandler, SubscriberOption.builder().name("sykros.command").build());
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        executor.submit(() -> {
+            try {
+                this.messageSubscriber.Subscribe("drake.command", commandHandler, SubscriberConfig.builder().name("sykros.command").build());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        executor.submit(() -> {
+            try {
+                this.messageSubscriber.Subscribe("drake.reply", replyHandler, SubscriberConfig.builder().name("sykros.reply").build());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        executor.shutdown();
+        logger.info("SysInitializer started");
+        logger.info("executor shutdown");
     }
 }

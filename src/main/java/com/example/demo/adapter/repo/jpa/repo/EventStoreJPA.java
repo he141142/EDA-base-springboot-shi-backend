@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface EventStoreJPA extends JpaRepository<Event, Long> {
     Optional<List<Event> >findAllByStreamIdAndStreamName(String streamId, String streamName);
     Optional<List<Event> >findAllByStreamIdAndStreamNameAndStreamVersionGreaterThan(String streamId, String streamName, int version);
-
+    
 }

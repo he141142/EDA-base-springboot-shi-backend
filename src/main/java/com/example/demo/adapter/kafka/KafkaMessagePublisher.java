@@ -1,11 +1,13 @@
 package com.example.demo.adapter.kafka;
 
-import com.example.demo.core.am.AmMessageBase;
-import com.example.demo.core.am.MessagePublisher;
+
+import sykros.cloud.edacore.internal.am.IMessage;
+import sykros.cloud.edacore.internal.am.MessagePublisher;
 
 public class KafkaMessagePublisher implements MessagePublisher {
+
     @Override
-    public <T extends AmMessageBase> void PublishMessage(T message, String topic) {
+    public void Publish(String topic, IMessage message) throws Exception {
 
     }
 }

@@ -28,7 +28,7 @@ public class AggregateBase extends EntityBase implements IAggregate {
     }
 
     @Override
-    public Iterable<IEvent> Events() {
+    public List<IEvent> Events() {
         return this.events;
     }
 }

@@ -13,16 +13,20 @@ import sykros.cloud.edacore.internal.am.event.EventMessageBase;
 import sykros.cloud.edacore.internal.ddd.event.IEvent;
 import sykros.cloud.edacore.internal.es.EsAggregate;
 import sykros.cloud.edacore.internal.es.EsAggregateBase;
+import sykros.cloud.edacore.internal.es.EsStoreEntity;
 import sykros.cloud.edacore.internal.es.EventApplier;
 
 import java.util.Map;
 
 @SuperBuilder
 @Setter
-public class Team extends EsAggregateBase implements EsAggregate, EventApplier {
+public class Team extends EsAggregateBase implements EsAggregate, EventApplier, EsStoreEntity {
 
     private static final String AGGREGATE_NAME = "Team.Aggregate";
     public static final String ERR_INVALID_TEAM_TYPE = "ERR Invalid team type";
+
+    public static final  String CREATE_TEAM_REPLY = "com.example.demo.domain.Team.CreateTeamReply";
+    public static final  String UPDATE_TEAM_TYPE_REPLY = "com.example.demo.domain.Team.UpdateTeamTypeReply";
 
     public static TeamType ToTeamType(String teamType) {
         return TeamType.valueOf(teamType.toUpperCase());
@@ -67,6 +71,10 @@ public class Team extends EsAggregateBase implements EsAggregate, EventApplier {
 
     public Team() {
         super(AGGREGATE_NAME);
+    }
+
+    public Team(String id) {
+        super(id,AGGREGATE_NAME);
     }
 
     public IEvent CreateTeamV2(Country country, String teamType, String teamName) {

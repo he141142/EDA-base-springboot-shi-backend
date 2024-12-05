@@ -9,6 +9,10 @@ public abstract class EsAggregateBase extends AggregateBase implements EsAggrega
         super(name);
     }
 
+    public EsAggregateBase(String id,String name) {
+        super(id,name);
+    }
+
     @Override
     public void CommitEvents() {
         this.version += this.events.size();

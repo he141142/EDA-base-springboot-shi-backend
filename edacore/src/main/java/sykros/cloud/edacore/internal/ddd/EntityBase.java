@@ -1,11 +1,18 @@
 package sykros.cloud.edacore.internal.ddd;
 
+import java.util.UUID;
+
 public abstract class EntityBase implements Entity{
     String id;
     String name;
 
     public EntityBase(String id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public EntityBase(String name) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 

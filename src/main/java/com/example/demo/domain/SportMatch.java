@@ -1,20 +1,23 @@
 package com.example.demo.domain;
 
-import com.example.demo.core.ddd.Event;
-import com.example.demo.core.es.BaseESAggregate;
-import com.example.demo.core.es.EsAggregate;
 import lombok.Getter;
 import lombok.Setter;
+import sykros.cloud.edacore.internal.ddd.event.IEvent;
+import sykros.cloud.edacore.internal.es.EsAggregate;
+import sykros.cloud.edacore.internal.es.EsAggregateBase;
+import sykros.cloud.edacore.internal.es.EsStoreEntity;
+import sykros.cloud.edacore.internal.es.EventApplier;
 
-import java.util.List;
 
 @Getter
 @Setter
-public class SportMatch extends BaseESAggregate implements EsAggregate {
+public class SportMatch extends EsAggregateBase implements EsAggregate, EventApplier, EsStoreEntity {
+    @Override
+    public void Apply(IEvent event) throws Exception {
+    }
     public enum MatchLevel {
         CLUB, COUNTRY, REGION
     }
-
     public static final String AGGREGATE_NAME = "SportMatch";
 
     Long id;
@@ -35,20 +38,12 @@ public class SportMatch extends BaseESAggregate implements EsAggregate {
 
     String matchDate;
 
-    private EsAggregate agg;
+    public SportMatch() {
+        super(AGGREGATE_NAME);
+    }
 
     public SportMatch(String id) {
-        super(id, AGGREGATE_NAME);
-    }
-
-    public SportMatch(String id, String name) {
-        super(id, name);
-    }
-
-
-    @Override
-    public void ApplyEvent(Event event) {
-
+        super(id,AGGREGATE_NAME);
     }
 
 }

@@ -1,17 +1,17 @@
 package com.example.demo.core.services.commands.createsportmatch;
 
-import com.example.demo.core.cqs.CommandHandler;
-import com.example.demo.core.es.AggregateStore;
 import com.example.demo.domain.SportMatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sykros.cloud.edacore.internal.cqs.CommandHandler;
+import sykros.cloud.edacore.internal.es.EsStore;
 
 @Service
 public class CreateSportMatchCommandHandler implements CommandHandler<SportMatch,CreateSportMatchCommand> {
-    AggregateStore<SportMatch> store;
+    EsStore<SportMatch> store;
 
     @Autowired
-    public void setStore(AggregateStore<SportMatch> store) {
+    public void setStore(EsStore<SportMatch> store) {
         this.store = store;
     }
 

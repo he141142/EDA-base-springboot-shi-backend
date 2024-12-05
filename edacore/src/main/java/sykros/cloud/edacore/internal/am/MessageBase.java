@@ -1,17 +1,20 @@
 package sykros.cloud.edacore.internal.am;
 
+import lombok.Setter;
 import sykros.cloud.edacore.internal.ddd.EntityBase;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
+@Setter
 public abstract class MessageBase extends EntityBase implements IMessageBase {
     public MessageBase(String id, String name) {
         super(id, name);
     }
 
     String subject;
-    Object metadata;
+    Map<String,Object>  metadata;
     Date sentAt;
 
     @Override
@@ -20,7 +23,7 @@ public abstract class MessageBase extends EntityBase implements IMessageBase {
     }
 
     @Override
-    public Object Metadata() {
+    public Map<String,Object> Metadata() {
         return metadata;
     }
 
